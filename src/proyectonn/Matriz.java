@@ -84,7 +84,7 @@ public class Matriz {
         this.mat[f][c] = value;
     }
     
-    public double getFC(int f, int c){
+    public double getFC(int f,int c){
         return this.mat[f][c];
     }
     
@@ -95,7 +95,7 @@ public class Matriz {
     debidamente ordenadas
     */
     
-    public static String toStringM(Matriz m){
+    public String toStringM(Matriz m){
         DecimalFormat df = new DecimalFormat("0.00");
         StringBuffer mat1 = new StringBuffer();
         
@@ -107,6 +107,20 @@ public class Matriz {
             mat1.append("\n");
         }
         String salida =  mat1.toString();
+        return salida;
+    }
+    
+    public String toStringM(){
+        DecimalFormat df = new DecimalFormat("0.00");
+        StringBuffer mat1= new StringBuffer();
+        for (int j=0;j<this.getFil();j++){
+            for (int i=0;i<this.getCol();i++){
+                mat1.append(" ");
+                mat1.append(df.format((this.toArray()[j][i])));
+            }
+            mat1.append("\n");
+        }
+        String salida = mat1.toString();
         return salida;
     }
     
@@ -160,7 +174,7 @@ public class Matriz {
         Matriz ret = new Matriz(retorno);
         
         for(int i = 0; i < A.getFil(); i++){
-            for(int j = 0; j < A.getCol(); j++){
+            for(int j = 0; j < B.getCol(); j++){
                 tmp = 0; 
                 for(int k = 0; k < A.getCol(); k++){
                     tmp += A.getFC(i, k) * B.getFC(k, j);
