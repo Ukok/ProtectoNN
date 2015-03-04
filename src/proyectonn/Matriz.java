@@ -97,7 +97,7 @@ public class Matriz {
     
     public String toStringM(Matriz m){
         DecimalFormat df = new DecimalFormat("0.00");
-        StringBuffer mat1 = new StringBuffer();
+        StringBuilder mat1 = new StringBuilder();
         
         for(int i = 0; i < m.getFil(); i++){
             for(int j = 0; j < m.getCol(); j++){
