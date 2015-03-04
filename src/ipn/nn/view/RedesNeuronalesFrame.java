@@ -6,6 +6,7 @@
 package ipn.nn.view;
 
 import proyectonn.Matriz;
+import proyectonn.Red;
 
 /**
  *
@@ -28,7 +29,7 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     String nomPatrones[] = new String[10];//Array String con los nombres de los patrones
     double matObjetivos[][] = new double[10][10];//Array con los valores objetivo
 
-   // Red miRedJA = null;
+    Red miRedJA = null;
 
     Matriz entrada;
 
