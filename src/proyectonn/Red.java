@@ -46,7 +46,7 @@ public class Red {
     */
     
     public static void init(Red redNeu){
-        double tempI[][] = new double[18][35];
+        double tempI[][] = new double[26][35];
         double tempO[][] = new double[26][18];
         
         for(int i = 0; i < 26; i++){
@@ -288,7 +288,7 @@ public class Red {
                     wO =  Matriz.Sumar(redNeu.getWo(), deltaWO);
                     
                     Matriz deltaWI = Matriz.MultME(Matriz.Multiplicar(dI, Matriz.Transponer(redNeu.getTrainMP().getColumna(j))), alpha);
-                    wI = Matriz.Sumar(redNeu.getWo(), deltaWO);
+                    wI = Matriz.Sumar(redNeu.getWi(), deltaWI);
                     
                     //se actualizan los pesos
                     redNeu.setPesos(wI, wO);
