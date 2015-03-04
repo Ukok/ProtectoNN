@@ -39,6 +39,7 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
      */
     public RedesNeuronalesFrame() {
         initComponents();
+        this.dibujarGuias();
     }
 
     /**
@@ -67,6 +68,11 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         setTitle("Proyecto Redes Neuronales");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
 
         zona.setBackground(new java.awt.Color(253, 250, 247));
         zona.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -208,8 +214,10 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     private void evaluarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evaluarButtonActionPerformed
         evaluarButton.setEnabled(false);
         System.out.print("Evaluar...");
-        dibujarSalida(matriz);
        
+        // AQUI LA EVALUACION
+        
+        dibujarSalida(matriz);       
         // Reiniciar la matriz.
         for (int j = 0; j <= 34; j++) {
             matriz[j] = 0;
@@ -220,15 +228,18 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_evaluarButtonActionPerformed
 
     private void entrenarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrenarButtonActionPerformed
-        System.out.print("Entrenar...");
         entrenarButton.setEnabled(false);
+        alfa.setEnabled(false);
+        errorMeta.setEnabled(false);
+        System.out.print("Entrenar...");
+        
         
         // AQUI EL ENTRENAMIENTO
         
-        dibujarGuias();
+        
         evaluarButton.setEnabled(true);
         zona.setEnabled(true);
-        entrenarButton.setEnabled(false);
+        dibujarGuias();
         System.out.println("[OK]");
     }//GEN-LAST:event_entrenarButtonActionPerformed
 
@@ -244,49 +255,20 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_zonaMouseMoved
 
     private void zonaSalidaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zonaSalidaMouseMoved
-        // TODO add your handling code here:
+        this.dibujarGuias();
     }//GEN-LAST:event_zonaSalidaMouseMoved
 
     private void evaluarButtonMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_evaluarButtonMouseMoved
         this.dibujarGuias();
     }//GEN-LAST:event_evaluarButtonMouseMoved
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RedesNeuronalesFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RedesNeuronalesFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RedesNeuronalesFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RedesNeuronalesFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new RedesNeuronalesFrame().setVisible(true);
-        });
-    }
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        this.dibujarGuias();
+    }//GEN-LAST:event_formMouseMoved
 
     private void dibujarGuias() {
-        dibujarGuias(zona);
-        dibujarGuias(zonaSalida);
+        this.dibujarGuias(zona);
+        this.dibujarGuias(zonaSalida);
     }
 
     private void dibujarGuias(Canvas zona) {
