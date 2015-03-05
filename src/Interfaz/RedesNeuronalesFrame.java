@@ -1,10 +1,9 @@
-package ipn.nn.view;
+package Interfaz;
 
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import proyectonn.Matriz;
-import proyectonn.Red;
+import Source.*;
 
 /**
  *
@@ -12,27 +11,7 @@ import proyectonn.Red;
  */
 public class RedesNeuronalesFrame extends javax.swing.JFrame {
 
-    /**
-     * **************************************************************************
-     * VARIABLES DE INICIO
-     * ***************************************************************************
-     */
-    int contPatrones = 0;//Variable para indicar el No de patrones ingresados
-//Matriz para capturar el patrón en tiempo real
-    double matriz[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int ID = 0;
-
-    double matPatrones[][] = new double[10][35];//Array temporal con los patrones
-    String nomPatrones[] = new String[10];//Array String con los nombres de los patrones
-    double matObjetivos[][] = new double[10][10];//Array con los valores objetivo
-
-    Red miRedJA = null;
-
-    Matriz entrada;
-
-//MATRICES (OBJETOS)
-    Matriz patronesM;
-    Matriz objetivosM;
+    RedesNeuronales Red = new RedesNeuronales();
 
     /**
      * Creates new form RedesNeuronalesFrame
@@ -214,13 +193,13 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     private void evaluarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evaluarButtonActionPerformed
         evaluarButton.setEnabled(false);
         System.out.print("Evaluar...");
-       
-        // AQUI LA EVALUACION
-        
-        dibujarSalida(matriz);       
+
+        Red.Calcular();
+
+        dibujarSalida(Red.getMatrizSalida());
         // Reiniciar la matriz.
         for (int j = 0; j <= 34; j++) {
-            matriz[j] = 0;
+            Red.getMatriz()[j] = 0;
         }
         zona.repaint();
         System.out.println("[OK]");
@@ -232,11 +211,51 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         alfa.setEnabled(false);
         errorMeta.setEnabled(false);
         System.out.print("Entrenar...");
-        
-        
+
+        double[][] matrixP = {{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0},
+        {1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0}};
+
+        String[] nombres = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+
+        Red.setMatPatrones(matrixP);
+
+        Red.iniObjetivos();
+
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 35; j++) {
+                Red.getMatriz()[j] = matrixP[i][j];
+            }
+            Red.agregarPatron(nombres[i]);
+        }
+
         // AQUI EL ENTRENAMIENTO
-        
-        
+        Red.Entrenar(Double.parseDouble(alfa.getText()), Double.parseDouble(errorMeta.getText()));
+
         evaluarButton.setEnabled(true);
         zona.setEnabled(true);
         dibujarGuias();
@@ -316,49 +335,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila1
         if ((fY > 0 && fY <= 20)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[0] == 1) {
-                    matriz[0] = 0;
+                if (Red.getMatriz()[0] == 1) {
+                    Red.getMatriz()[0] = 0;
                     g.clearRect(0, 0, 20, 20);
                 } else {
-                    matriz[0] = 1;
+                    Red.getMatriz()[0] = 1;
                     g.fillRect(0, 0, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[1] == 1) {
-                    matriz[1] = 0;
+                if (Red.getMatriz()[1] == 1) {
+                    Red.getMatriz()[1] = 0;
                     g.clearRect(20, 0, 20, 20);
                 } else {
-                    matriz[1] = 1;
+                    Red.getMatriz()[1] = 1;
                     g.fillRect(20, 0, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[2] == 1) {
-                    matriz[2] = 0;
+                if (Red.getMatriz()[2] == 1) {
+                    Red.getMatriz()[2] = 0;
                     g.clearRect(40, 0, 20, 20);
                 } else {
-                    matriz[2] = 1;
+                    Red.getMatriz()[2] = 1;
                     g.fillRect(40, 0, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[3] == 1) {
-                    matriz[3] = 0;
+                if (Red.getMatriz()[3] == 1) {
+                    Red.getMatriz()[3] = 0;
                     g.clearRect(60, 0, 20, 20);
                 } else {
-                    matriz[3] = 1;
+                    Red.getMatriz()[3] = 1;
                     g.fillRect(60, 0, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[4] == 1) {
-                    matriz[4] = 0;
+                if (Red.getMatriz()[4] == 1) {
+                    Red.getMatriz()[4] = 0;
                     g.clearRect(80, 0, 20, 20);
                 } else {
-                    matriz[4] = 1;
+                    Red.getMatriz()[4] = 1;
                     g.fillRect(80, 0, 20, 20);
                 }
             }
@@ -366,49 +385,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila2
         if ((fY > 20 && fY <= 40)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[5] == 1) {
-                    matriz[5] = 0;
+                if (Red.getMatriz()[5] == 1) {
+                    Red.getMatriz()[5] = 0;
                     g.clearRect(0, 20, 20, 20);
                 } else {
-                    matriz[5] = 1;
+                    Red.getMatriz()[5] = 1;
                     g.fillRect(0, 20, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[6] == 1) {
-                    matriz[6] = 0;
+                if (Red.getMatriz()[6] == 1) {
+                    Red.getMatriz()[6] = 0;
                     g.clearRect(20, 20, 20, 20);
                 } else {
-                    matriz[6] = 1;
+                    Red.getMatriz()[6] = 1;
                     g.fillRect(20, 20, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[7] == 1) {
-                    matriz[7] = 0;
+                if (Red.getMatriz()[7] == 1) {
+                    Red.getMatriz()[7] = 0;
                     g.clearRect(40, 20, 20, 20);
                 } else {
-                    matriz[7] = 1;
+                    Red.getMatriz()[7] = 1;
                     g.fillRect(40, 20, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[8] == 1) {
-                    matriz[8] = 0;
+                if (Red.getMatriz()[8] == 1) {
+                    Red.getMatriz()[8] = 0;
                     g.clearRect(60, 20, 20, 20);
                 } else {
-                    matriz[8] = 1;
+                    Red.getMatriz()[8] = 1;
                     g.fillRect(60, 20, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[9] == 1) {
-                    matriz[9] = 0;
+                if (Red.getMatriz()[9] == 1) {
+                    Red.getMatriz()[9] = 0;
                     g.clearRect(80, 20, 20, 20);
                 } else {
-                    matriz[9] = 1;
+                    Red.getMatriz()[9] = 1;
                     g.fillRect(80, 20, 20, 20);
                 }
             }
@@ -416,49 +435,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila3
         if ((fY > 40 && fY <= 60)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[10] == 1) {
-                    matriz[10] = 0;
+                if (Red.getMatriz()[10] == 1) {
+                    Red.getMatriz()[10] = 0;
                     g.clearRect(0, 40, 20, 20);
                 } else {
-                    matriz[10] = 1;
+                    Red.getMatriz()[10] = 1;
                     g.fillRect(0, 40, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[11] == 1) {
-                    matriz[11] = 0;
+                if (Red.getMatriz()[11] == 1) {
+                    Red.getMatriz()[11] = 0;
                     g.clearRect(20, 40, 20, 20);
                 } else {
-                    matriz[11] = 1;
+                    Red.getMatriz()[11] = 1;
                     g.fillRect(20, 40, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[12] == 1) {
-                    matriz[12] = 0;
+                if (Red.getMatriz()[12] == 1) {
+                    Red.getMatriz()[12] = 0;
                     g.clearRect(40, 40, 20, 20);
                 } else {
-                    matriz[12] = 1;
+                    Red.getMatriz()[12] = 1;
                     g.fillRect(40, 40, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[13] == 1) {
-                    matriz[13] = 0;
+                if (Red.getMatriz()[13] == 1) {
+                    Red.getMatriz()[13] = 0;
                     g.clearRect(60, 40, 20, 20);
                 } else {
-                    matriz[13] = 1;
+                    Red.getMatriz()[13] = 1;
                     g.fillRect(60, 40, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[14] == 1) {
-                    matriz[14] = 0;
+                if (Red.getMatriz()[14] == 1) {
+                    Red.getMatriz()[14] = 0;
                     g.clearRect(80, 40, 20, 20);
                 } else {
-                    matriz[14] = 1;
+                    Red.getMatriz()[14] = 1;
                     g.fillRect(80, 40, 20, 20);
                 }
             }
@@ -466,49 +485,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila4
         if ((fY > 60 && fY <= 80)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[15] == 1) {
-                    matriz[15] = 0;
+                if (Red.getMatriz()[15] == 1) {
+                    Red.getMatriz()[15] = 0;
                     g.clearRect(0, 60, 20, 20);
                 } else {
-                    matriz[15] = 1;
+                    Red.getMatriz()[15] = 1;
                     g.fillRect(0, 60, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[16] == 1) {
-                    matriz[16] = 0;
+                if (Red.getMatriz()[16] == 1) {
+                    Red.getMatriz()[16] = 0;
                     g.clearRect(20, 60, 20, 20);
                 } else {
-                    matriz[16] = 1;
+                    Red.getMatriz()[16] = 1;
                     g.fillRect(20, 60, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[17] == 1) {
-                    matriz[17] = 0;
+                if (Red.getMatriz()[17] == 1) {
+                    Red.getMatriz()[17] = 0;
                     g.clearRect(40, 60, 20, 20);
                 } else {
-                    matriz[17] = 1;
+                    Red.getMatriz()[17] = 1;
                     g.fillRect(40, 60, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[18] == 1) {
-                    matriz[18] = 0;
+                if (Red.getMatriz()[18] == 1) {
+                    Red.getMatriz()[18] = 0;
                     g.clearRect(60, 60, 20, 20);
                 } else {
-                    matriz[18] = 1;
+                    Red.getMatriz()[18] = 1;
                     g.fillRect(60, 60, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[19] == 1) {
-                    matriz[19] = 0;
+                if (Red.getMatriz()[19] == 1) {
+                    Red.getMatriz()[19] = 0;
                     g.clearRect(80, 60, 20, 20);
                 } else {
-                    matriz[19] = 1;
+                    Red.getMatriz()[19] = 1;
                     g.fillRect(80, 60, 20, 20);
                 }
             }
@@ -516,49 +535,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila5
         if ((fY > 80 && fY <= 100)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[20] == 1) {
-                    matriz[20] = 0;
+                if (Red.getMatriz()[20] == 1) {
+                    Red.getMatriz()[20] = 0;
                     g.clearRect(0, 80, 20, 20);
                 } else {
-                    matriz[20] = 1;
+                    Red.getMatriz()[20] = 1;
                     g.fillRect(0, 80, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[21] == 1) {
-                    matriz[21] = 0;
+                if (Red.getMatriz()[21] == 1) {
+                    Red.getMatriz()[21] = 0;
                     g.clearRect(20, 80, 20, 20);
                 } else {
-                    matriz[21] = 1;
+                    Red.getMatriz()[21] = 1;
                     g.fillRect(20, 80, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[22] == 1) {
-                    matriz[22] = 0;
+                if (Red.getMatriz()[22] == 1) {
+                    Red.getMatriz()[22] = 0;
                     g.clearRect(40, 80, 20, 20);
                 } else {
-                    matriz[22] = 1;
+                    Red.getMatriz()[22] = 1;
                     g.fillRect(40, 80, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[23] == 1) {
-                    matriz[23] = 0;
+                if (Red.getMatriz()[23] == 1) {
+                    Red.getMatriz()[23] = 0;
                     g.clearRect(60, 80, 20, 20);
                 } else {
-                    matriz[23] = 1;
+                    Red.getMatriz()[23] = 1;
                     g.fillRect(60, 80, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[24] == 1) {
-                    matriz[24] = 0;
+                if (Red.getMatriz()[24] == 1) {
+                    Red.getMatriz()[24] = 0;
                     g.clearRect(80, 80, 20, 20);
                 } else {
-                    matriz[24] = 1;
+                    Red.getMatriz()[24] = 1;
                     g.fillRect(80, 80, 20, 20);
                 }
             }
@@ -566,47 +585,47 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila6
         if ((fY > 100 && fY <= 120)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[25] == 1) {
-                    matriz[25] = 0;
+                if (Red.getMatriz()[25] == 1) {
+                    Red.getMatriz()[25] = 0;
                     g.clearRect(0, 100, 20, 20);
                 } else {
-                    matriz[25] = 1;
+                    Red.getMatriz()[25] = 1;
                     g.fillRect(0, 100, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[26] == 1) {
-                    matriz[26] = 0;
+                if (Red.getMatriz()[26] == 1) {
+                    Red.getMatriz()[26] = 0;
                     g.clearRect(20, 100, 20, 20);
                 } else {
-                    matriz[26] = 1;
+                    Red.getMatriz()[26] = 1;
                     g.fillRect(20, 100, 20, 20);
                 }
             }
             if (fX > 40 && fX <= 60) {
-                if (matriz[27] == 1) {
-                    matriz[27] = 0;
+                if (Red.getMatriz()[27] == 1) {
+                    Red.getMatriz()[27] = 0;
                     g.clearRect(40, 100, 20, 20);
                 } else {
-                    matriz[27] = 1;
+                    Red.getMatriz()[27] = 1;
                     g.fillRect(40, 100, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[28] == 1) {
-                    matriz[28] = 0;
+                if (Red.getMatriz()[28] == 1) {
+                    Red.getMatriz()[28] = 0;
                     g.clearRect(60, 100, 20, 20);
                 } else {
-                    matriz[28] = 1;
+                    Red.getMatriz()[28] = 1;
                     g.fillRect(60, 100, 20, 20);
                 }
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[29] == 1) {
-                    matriz[29] = 0;
+                if (Red.getMatriz()[29] == 1) {
+                    Red.getMatriz()[29] = 0;
                     g.clearRect(80, 100, 20, 20);
                 } else {
-                    matriz[29] = 1;
+                    Red.getMatriz()[29] = 1;
                     g.fillRect(80, 100, 20, 20);
                 }
             }
@@ -614,49 +633,49 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
         //Fila7
         if ((fY > 120 && fY <= 140)) {
             if (fX > 0 && fX <= 20) {
-                if (matriz[30] == 1) {
-                    matriz[30] = 0;
+                if (Red.getMatriz()[30] == 1) {
+                    Red.getMatriz()[30] = 0;
                     g.clearRect(0, 120, 20, 20);
                 } else {
-                    matriz[30] = 1;
+                    Red.getMatriz()[30] = 1;
                     g.fillRect(0, 120, 20, 20);
                 }
             }
             if (fX > 20 && fX <= 40) {
-                if (matriz[31] == 1) {
-                    matriz[31] = 0;
+                if (Red.getMatriz()[31] == 1) {
+                    Red.getMatriz()[31] = 0;
                     g.clearRect(20, 120, 20, 20);
                 } else {
-                    matriz[31] = 1;
+                    Red.getMatriz()[31] = 1;
                     g.fillRect(20, 120, 20, 20);
                 }
             }
 
             if (fX > 40 && fX <= 60) {
-                if (matriz[32] == 1) {
-                    matriz[32] = 0;
+                if (Red.getMatriz()[32] == 1) {
+                    Red.getMatriz()[32] = 0;
                     g.clearRect(40, 120, 20, 20);
                 } else {
-                    matriz[32] = 1;
+                    Red.getMatriz()[32] = 1;
                     g.fillRect(40, 120, 20, 20);
                 }
             }
             if (fX > 60 && fX <= 80) {
-                if (matriz[33] == 1) {
-                    matriz[33] = 0;
+                if (Red.getMatriz()[33] == 1) {
+                    Red.getMatriz()[33] = 0;
                     g.clearRect(60, 120, 20, 20);
                 } else {
-                    matriz[33] = 1;
+                    Red.getMatriz()[33] = 1;
                     g.fillRect(60, 120, 20, 20);
                 }
 
             }
             if (fX > 80 && fX <= 100) {
-                if (matriz[34] == 1) {
-                    matriz[34] = 0;
+                if (Red.getMatriz()[34] == 1) {
+                    Red.getMatriz()[34] = 0;
                     g.clearRect(80, 120, 20, 20);
                 } else {
-                    matriz[34] = 1;
+                    Red.getMatriz()[34] = 1;
                     g.fillRect(80, 120, 20, 20);
                 }
             }
@@ -665,15 +684,15 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
     }
 
     private void dibujarSalida(double[] matriz) {
-        
+
         int i = 0;
         int ini = 0, end = 0;
 
         int dim = 20;
         Graphics g = zonaSalida.getGraphics();
-        
+
         for (i = 0; i < 35; i++) {
-            
+
             if (ini == 100) {
                 end += dim;
                 ini = 0;
@@ -686,5 +705,16 @@ public class RedesNeuronalesFrame extends javax.swing.JFrame {
             dibujarGuias();
         }
         g.dispose();
+    }
+
+    public static void main(String[] args) {
+        RedesNeuronalesFrame red = new RedesNeuronalesFrame();
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                red.setVisible(true);
+
+            }
+        });
     }
 }
