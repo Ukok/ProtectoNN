@@ -1,5 +1,7 @@
 package proyectonn;
 
+import ipn.nn.view.RedesNeuronalesFrame;
+
 /**
  *
  * @author carlo_000
@@ -49,8 +51,11 @@ public class prueba {
     }
     
     public static void main(String[] args){
+        RedesNeuronalesFrame frame = new RedesNeuronalesFrame();
+        frame.setVisible(true);
         prueba llamar = new prueba();
         llamar.llamarF();
+        
         
     }
 }
